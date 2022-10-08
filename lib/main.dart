@@ -41,7 +41,7 @@ class SpinnerWheelState extends State<SpinnerWheel> {
   String currSelected = '';
 
   bool _isListView = true;
-  bool _isSpinning = true;
+  bool _isSpinning = false;
 
   late StreamController<int> selected;
   late TextEditingController controller;
@@ -361,7 +361,7 @@ class NewWheel extends StatelessWidget {
   NewWheel(this.addWheel, {Key? key}) : super(key: key);
 
   void _submitData(BuildContext context) {
-    List<String> items = _itemsController.text.split(',');
+    List<String> items = _itemsController.text.split(RegExp('[, ]+'));
     addWheel(_nameController.text, items);
 
     Navigator.of(context).pop();
