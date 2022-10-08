@@ -200,7 +200,7 @@ class SpinnerWheelState extends State<SpinnerWheel> {
 
   Widget _buildText() {
     if (_isSpinning) {
-      Future.delayed(const Duration(milliseconds: 4500), () {
+      Future.delayed(const Duration(milliseconds: 4600), () {
       setState(() {
         _isSpinning = false;
       });
@@ -313,66 +313,56 @@ class SpinnerWheelState extends State<SpinnerWheel> {
   }
 }
 
-class WheelList extends StatefulWidget {
+class WheelList extends StatelessWidget {
   final Function loadBars;
   final Function updateScreen;
   final Function deleteWheel;
 
   final List<Wheel> wheels;
 
-  WheelList(this.wheels, this.loadBars, this.updateScreen, this.deleteWheel);
+  const WheelList(this.wheels, this.loadBars, this.updateScreen, this.deleteWheel, {Key? key}) : super(key: key);
 
-  @override
-  State<WheelList> createState() => _WheelListState();
-}
-
-class _WheelListState extends State<WheelList> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
       itemBuilder: (BuildContext context, int index) {
         return GestureDetector(
           onTap: () {
-            widget.loadBars(widget.wheels[index].name);
-            widget.updateScreen(false, widget.wheels[index]);
+            loadBars(wheels[index].name);
+            updateScreen(false, wheels[index]);
           },
           child: Card(
             elevation: 5,
             margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 5),
             child: ListTile(
               title: Text(
-                widget.wheels[index].name!,
+                wheels[index].name!,
               ),
               trailing: IconButton(
                 icon: const Icon(Icons.delete),
                 color: Colors.red,
-                onPressed: () => widget.deleteWheel(widget.wheels[index].name),
+                onPressed: () => deleteWheel(wheels[index].name),
               ),
             ),
           ),
         );
       },
-      itemCount: widget.wheels.length,
+      itemCount: wheels.length,
     );
   }
 }
 
-class NewWheel extends StatefulWidget {
+class NewWheel extends StatelessWidget {
   final Function addWheel;
 
-  const NewWheel(this.addWheel);
-
-  @override
-  NewWheelState createState() => NewWheelState();
-}
-
-class NewWheelState extends State<NewWheel> {
   final _nameController = TextEditingController();
   final _itemsController = TextEditingController();
 
-  void _submitData() {
+  NewWheel(this.addWheel, {Key? key}) : super(key: key);
+
+  void _submitData(BuildContext context) {
     List<String> items = _itemsController.text.split(',');
-    widget.addWheel(_nameController.text, items);
+    addWheel(_nameController.text, items);
 
     Navigator.of(context).pop();
   }
@@ -405,7 +395,7 @@ class NewWheelState extends State<NewWheel> {
                 controller: _itemsController,
               ),
               ElevatedButton(
-                onPressed: _submitData,
+                onPressed: () => _submitData(context),
                 child: const Text(
                   'Add Wheel',
                 ),
