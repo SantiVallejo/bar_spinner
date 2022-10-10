@@ -361,7 +361,7 @@ class NewWheel extends StatelessWidget {
   NewWheel(this.addWheel, {Key? key}) : super(key: key);
 
   void _submitData(BuildContext context) {
-    List<String> items = _itemsController.text.split(RegExp(', |,'));
+    List<String> items = _itemsController.text.split(RegExp(', {0,}'));
     addWheel(_nameController.text, items);
 
     Navigator.of(context).pop();
